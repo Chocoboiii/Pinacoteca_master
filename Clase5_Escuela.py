@@ -1,5 +1,5 @@
 #IMPORTAR LIBRERIAS 
-from Set1_Paises import paises
+from Set_Paises import paises
 from enum        import Enum
 from datetime    import datetime
 

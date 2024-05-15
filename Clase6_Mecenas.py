@@ -1,101 +1,18 @@
 #IMPORTAR LIBRERIAS 
-from Set1_Paises import paises
+from ClaseMadre_Persona import Persona as p
+from Set_Paises import paises
 from datetime    import datetime
 from enum        import Enum
 
 formato_fecha = "%d/%m/%Y" 
 
-class Mecena:
+class Mecena(p):
     
-    def __init__(self, id = 0, nombre = '', pais = '', ciudad_nacimienito = '', fecha_fallecimiento = ''):
-        self.id                  = id
-        self.nombre              = nombre
-        self.pais                = pais
-        self.ciudad_nacimienito  = ciudad_nacimienito
-        self.fecha_fallecimiento = fecha_fallecimiento
+    def __init__(self, id = 0, nombre = '', pais = '', ciudad_nacimiento = '', fecha_fallecimiento = '',_ID_pintor = set()):
+        super().__init__(id, nombre, pais, ciudad_nacimiento, fecha_fallecimiento)
         self._ID_pintor          = set()
     
-    #DECORADOR DE ID
-    @property
-    def id(self):
-        return self._id
-    
-    @id.setter
-    def id(self, id):
-        if id <= 0:
-            print("ID No valido")
-            return None
-        self._id = id
-        
-    #DECORADOR NOMBRE
-    @property
-    def nombre(self):
-        return self._nombre
-    
-    @nombre.setter
-    def nombre(self, nombre): #TODO Validar el nombre con valores alfabeticos
-        if nombre == '':
-            self._nombre = ''
-            return
-        if not nombre.isalpha():
-            print("El nombre no corresponde a valores alfabeticos")
-        self._nombre = nombre
-    
-    #DECORADOR PAIS
-    @property
-    def pais(self):
-        return self._pais
-    
-    @pais.setter 
-    def pais(self, pais):
-        if pais == '':
-            self._pais = ''
-            return
-        paist = set([pais])
-        if paist.issubset(paises):
-            self._pais = pais
-        else:
-            print("El país ingresado no se reconoce en la base de datos")
-            return None
-    
-    #DECORADOR CIUDAD DE NACIMIENTO
-    @property
-    def ciudad_nacimienito(self):
-        return self._ciudad_nacimienito
-    
-    @ciudad_nacimienito.setter 
-    def ciudad_nacimienito(self, ciudad_nacimienito):
-        if ciudad_nacimienito == '':
-            self._ciudad_nacimienito = ''
-            return
-        if not ciudad_nacimienito.isalpha():
-            print("La ciudad de nacimienito no corresponde a valores alfabeticos")
-            return None
-        self._ciudad_nacimienito = ciudad_nacimienito
-    
-    #DECORADOR DE FECHA DE FALLECIMIENTO
-    @property 
-    def fecha_fallecimiento(self):
-        return self._fecha_fallecimiento
-    
-    @fecha_fallecimiento.setter 
-    def fecha_fallecimiento(self, fecha_fallecimiento):
-        if fecha_fallecimiento == '':
-            self._fecha_fallecimiento = ''
-            return
-        try:
-            #VALIDAR QUE TENGA EL FORMATO CORRECTO
-            fecha_obj = datetime.strptime(fecha_fallecimiento, formato_fecha)
-            #VALIDAR QUE NO SEA UNA FECHA FUTURA A LA 
-            año_actual = datetime.now().year
-            if fecha_obj.year > año_actual:
-                print("La fecha ingresada no es correcta")
-                return None
-            self._fecha_fallecimiento = fecha_fallecimiento
-        except:
-            print("El formato de la fecha de creación no es correcto")
-            return None
-    
+
     #METODO PARA RELACIONAR LA PINCOTECA CON OTRAS IDENTIDATES
     def __relacion__(self, bd):
         while True:
@@ -187,7 +104,7 @@ class Mecena:
                 
         self._nombre              = None
         self._pais                = None
-        self._ciudad_nacimienito  = None
+        self._ciudad_nacimiento  = None
         self._fecha_fallecimiento = None
         self._ID_pintor           = None
     
@@ -197,10 +114,10 @@ class Mecena:
         while True:
             self.nombre              = input("\tIngrese Nombre:                 ")
             self.pais                = input("\tIngrese País:                   ")
-            self.ciudad_nacimienito  = input("\tIngrese Ciudad de Nacimiento:   ")
+            self.ciudad_nacimiento  = input("\tIngrese Ciudad de Nacimiento:   ")
             self.fecha_fallecimiento = input("\tIngrese Fecha de Fallecimiento: ")
             
-            if not(self._nombre == None or self._pais == None or self._ciudad_nacimienito == None
+            if not(self._nombre == None or self._pais == None or self._ciudad_nacimiento == None
                    or self._fecha_fallecimiento == None):
                 break
         
@@ -218,7 +135,7 @@ class Mecena:
                 f" ID:                     {self._id}\n"
                 f" Nombre:                 {self._nombre}\n"
                 f" País:                   {self._pais}\n"
-                f" Ciudad de nacimiento:   {self._ciudad_nacimienito}\n"
+                f" Ciudad de nacimiento:   {self._ciudad_nacimiento}\n"
                 f" Fecha de fallecimiento: {self._fecha_fallecimiento}\n"
                 f" LA MECENA {self._nombre} patrocina al:\n"
                 f" ID Pintor:              {self._ID_pintor}\n"

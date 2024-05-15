@@ -1,129 +1,23 @@
 #IMPORTAR LIBRERIAS
+from ClaseMadre_Persona import Persona as p
 from datetime    import datetime
-from Set1_Paises import paises
+from Set_Paises import paises
 from enum        import Enum
 
 formato_fecha = "%d/%m/%Y"
 
-class Pintor():
+class Pintor(p):
      
-    def __init__(self, id = 0, nombre = '', fecha_nacimiento = '', fecha_defuncion = '', ciudad = '', pais = '',):
-        self.id               = id 
-        self.nombre           = nombre
-        self.fecha_nacimiento = fecha_nacimiento
-        self.fecha_defuncion  = fecha_defuncion
-        self.ciudad           = ciudad
-        self.pais             = pais
+    def __init__(self, id, nombre, pais, ciudad_nacimiento, fecha_fallecimiento, fecha_nacimiento = None, _ID_maestro = None, _ID_alumnos = set(), _ID_mecenas = set(), _ID_F_Escuela = [None,''], _ID_cuadros = set()):
+        super().__init__(id, nombre, pais, ciudad_nacimiento, fecha_fallecimiento )
         #ID'S QUE SE RELACIONAN AQUÍ
-        self._ID_maestro      = None
-        self._ID_alumnos      = set()
-        self._ID_mecenas      = set()
-        self._ID_F_Escuela    = [None,'']
+        self._fecha_nacimiento = None
+        self._ID_maestro       = None
+        self._ID_alumnos       = set()
+        self._ID_mecenas       = set()
+        self._ID_F_Escuela     = [None,'']
         #ID QUE SE RELACIONAN EN OTRA CLASE
-        self._ID_cuadros      = set()
-        
-    #DECORADOR DE ID
-    @property
-    def id(self):
-        return self._id
-    
-    @id.setter
-    def id(self, id):
-        if id <= 0:
-            print("ID No valido")
-            return None
-        self._id = id
-    
-    #DECORADOR NOMBRE
-    @property
-    def nombre(self):
-        return self._nombre
-    
-    @nombre.setter
-    def nombre(self, nombre): #TODO Validar el nombre con valores alfabeticos
-        if nombre == '':
-            self._nombre = ''
-        if not nombre.isalpha():
-            print("El nombre no corresponde a valores alfabeticos")
-            return None
-        self._nombre = nombre    
-    
-    #DECORADOR FECHA DE NACIMIENTO
-    @property 
-    def fecha_nacimiento(self):
-        return self._fecha_nacimiento
-    
-    @fecha_nacimiento.setter 
-    def fecha_nacimiento(self, fecha_nacimiento):
-        if fecha_nacimiento == '':
-            self._fecha_nacimiento = ''
-            return
-        try:
-            #VALIDAR QUE TENGA EL FORMATO CORRECTO
-            fecha_obj = datetime.strptime(fecha_nacimiento, formato_fecha)
-            #VALIDAR QUE EL CLIENTE SEA MAYOR DE EDAD
-            año_actual = datetime.now().year
-            if fecha_obj.year > (año_actual-18):
-                print("El cliente no es mayor de edad")
-                return None
-            self._fecha_nacimiento = fecha_nacimiento
-        except:
-            print("El formato de la fecha de nacimiento no es correcto")
-            return None
-        
-    #DECORADOR FECHA DE DEFUNCIÓN
-    @property 
-    def fecha_defuncion(self):
-        return self._fecha_defuncion
-    
-    @fecha_defuncion.setter 
-    def fecha_defuncion(self, fecha_defuncion):
-        if fecha_defuncion == '':
-            self._fecha_defuncion = ''
-            return
-        try:
-            #VALIDAR QUE TENGA EL FORMATO CORRECTO
-            fecha_obj     = datetime.strptime(fecha_defuncion, formato_fecha)
-            #VALIDAR QUE LA FECHA DE DEFUNCIÓN NO SEA ANTERIOR A LA FECHA DE NACIMIENTO
-            fecha_obj_nac = datetime.strptime(self._fecha_nacimiento, formato_fecha)
-            
-            if fecha_obj.year <= fecha_obj_nac.year:
-                print("Inconsistencia en la fecha de nacimiento y defunción")
-                return None
-            self._fecha_defuncion = fecha_defuncion
-        except:
-            print("El formato de la fecha de defunción no es correcto")
-            return None
-    
-    #DECORADOR CIUDAD
-    @property
-    def ciudad(self):
-        return self._ciudad
-    
-    @ciudad.setter 
-    def ciudad(self, ciudad):
-        if ciudad == '':
-            self._ciudad = ''
-        if not ciudad.isalpha():
-            print("La ciudad no corresponde a valores alfabeticos")
-            return None
-        self._ciudad = ciudad
-    
-    #DECORADOR PAIS
-    @property
-    def pais(self):
-        return self._pais
-    
-    @pais.setter 
-    def pais(self, pais):
-        if pais == '':
-            self._pais = ''
-        paist = set([pais])
-        if paist.issubset(paises):
-            self._pais = pais
-        else:
-            print("El país ingresado no se reconoce en la base de datos")
-            return None
+        self._ID_cuadros       = set()
         
     #METODO PARA RELACIONAR LA PINCOTECA CON OTRAS IDENTIDATES
     def __relacion__(self, bd):
@@ -167,9 +61,9 @@ class Pintor():
                                     #VALIDAR QUE EL AÑO NO SEA MAYOR AL ACTUAL Y QUE NO SEA ANTES DE SU FECHA DE NACIMIENTO Y DE FALLECIMIENTO
                                     año_actual = datetime.now().year
                                     nacimiento = (datetime.strptime(self.fecha_nacimiento, formato_fecha)).year
-                                    if not(self.fecha_defuncion == ''):
-                                        defuncion = (datetime.strptime(self.fecha_defuncion, formato_fecha)).year
-                                        if fecha_obj.year >= defuncion or fecha_obj.year <= nacimiento:
+                                    if not(self.fecha_fallecimiento == ''):
+                                        fallecimiento = (datetime.strptime(self.fecha_fallecimiento, formato_fecha)).year
+                                        if fecha_obj.year >= fallecimiento or fecha_obj.year <= nacimiento:
                                             print("Inconsistencia en la fecha")
                                         self._ID_F_Escuela[1] =  ing_esc
                                         break
@@ -179,7 +73,7 @@ class Pintor():
                                         self._ID_F_Escuela[1] =  ing_esc
                                         break
                                 except:
-                                    print("El formato de la fecha de defunción no es correcto")
+                                    print("El formato de la fecha de fallecimiento no es correcto")
                                     continue
                     if entidad == self.__Menu__.CUADROS:
                         add_id = self.__ids__(entidad, bd, 'M')
@@ -309,16 +203,16 @@ class Pintor():
             except:
                 pass
 
-        self._nombre           = None
-        self._fecha_nacimiento = None
-        self._fecha_defuncion  = None
-        self._ciudad           = None
-        self._pais             = None
-        self._ID_maestro       = None
-        self._ID_alumnos       = None
-        self._ID_mecenas       = None
-        self._ID_F_Escuela     = None
-        self._ID_cuadros       = None
+        self._nombre               = None
+        self._fecha_nacimiento     = None
+        self._fecha_fallecimiento  = None
+        self._ciudad_nacimiento   = None
+        self._pais                 = None
+        self._ID_maestro           = None
+        self._ID_alumnos           = None
+        self._ID_mecenas           = None
+        self._ID_F_Escuela         = None
+        self._ID_cuadros           = None
     
     def __modificacion__(self, bd, id_t):
         self.__restartrel__(bd, id_t)
@@ -326,12 +220,12 @@ class Pintor():
         while True:
             self.nombre           = input("\tIngrese Nombre:              ")
             self.fecha_nacimiento = input("\tIngrese Fecha de Nacimiento: ")
-            self.fecha_defuncion  = input("\tIngrese Fecha de Defunción:  ")
-            self.ciudad           = input("\tIngrese Ciudad:              ")
+            self.fecha_fallecimiento  = input("\tIngrese Fecha de Fallecimiento:  ")
+            self.ciudad_nacimiento           = input("\tIngrese Ciudad de Nacimiento:              ")
             self.pais             = input("\tIngrese País: ")
             
-            if not(self._nombre == None or self._fecha_nacimiento == None or self._fecha_defuncion == None 
-                   or self._ciudad == None or self._pais == None):
+            if not(self._nombre == None or self._fecha_nacimiento == None or self._fecha_fallecimiento == None 
+                   or self._ciudad_nacimiento == None or self._pais == None):
                 break
         
         #ID'S QUE SE RELACIONAN AQUÍ
@@ -358,8 +252,8 @@ class Pintor():
             f" ID:                  {self._id}\n"
             f" Nombre:              {self._nombre}\n"
             f" Fecha de Nacimiento: {self._fecha_nacimiento}\n"
-            f" Fecha de Defunción:  {self._fecha_defuncion}\n"
-            f" Ciudad:              {self._ciudad}\n"
+            f" Fecha de fallecimiento:  {self._fecha_fallecimiento}\n"
+            f" Ciudad de nacimiento:              {self._ciudad_nacimiento}\n"
             f" Pais:                {self._pais}\n"
             f" EL PINTOR: {self.nombre} se relaciona con:\n"
             f" El Maestro:          {self._ID_maestro}\n"

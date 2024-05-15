@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Apr 29 16:12:10 2024
-
-@author: Rodrigo Quintero 
-
-"""
 #IMPORTAR LIBRERIAS
 from datetime import datetime
 from enum import Enum

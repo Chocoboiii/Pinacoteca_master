@@ -68,7 +68,7 @@ class Pinacoteca():
         if ciudad == '':
             self._ciudad = ''
             return
-        if not ciudad.isalpha():
+        if not ciudad.isalnum():
             print("La ciudad no corresponde a valores alfabeticos")
             return None
         self._ciudad = ciudad
@@ -252,11 +252,3 @@ class Pinacoteca():
             f" Los Clientes:     {self._ID_clientes}\n"
             f" Las Ventas:       {self._ID_ventas}\n"
         )
-
-
-'''       
-bd = {"pinacotecas":[], "clientes":[], "cuadros": [], "escuelas":[], "mecenas": [], "pintores": [], "ventas": []}
-prueba = Pinacoteca(1,"PinacotecaMaria", "Chimalpopoca51", "Guadalajara", 43.34, 73)
-prueba.__relacion__()
-print(prueba)
-'''

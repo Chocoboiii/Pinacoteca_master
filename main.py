@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Name 
     SGP: Sistema Gestor de Pinacotecas
@@ -7,6 +6,8 @@ Description
     El Sistema Gestor de Pinacotecas ayuda a gestionar la administración de diferentes
     pinacotecas. Principalmente la gestión de de cuadros, pintores, mecenas, clientes,
     escuelas, maestros y ventas.
+    Para que el programa funcione, necesita la instalacion del modulo country_list,
+    Busque el simbolo del sistema y escriba "pip install country_list" para instalarlo
     
 """
 #PROGRAMA PRINCIPAL DE LA BASE DE DATOS DE UNA PINACOTECA

@@ -141,7 +141,7 @@ class SGP():
             ultimo_id = ultimo_registro.id
             nuevo_id = ultimo_id + 1
         else:
-            # SI LA LISTA ESTA VACÍA ASIGNAR AUTMATICAMENTE EL ID
+            # SI LA LISTA ESTA VACÍA ASIGNAR AUTOMATICAMENTE EL ID
             nuevo_id = 1
         
         # PEDIR AL USUARIO QUE INGRESE LOS VALORES DE LOS ATRIBUTOS
